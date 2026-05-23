@@ -2,6 +2,7 @@ from flask import Flask,render_template,redirect,request
 from google import genai
 from dotenv import load_dotenv
 import os
+from markdown import markdown
 
 load_dotenv()
 app = Flask(__name__)
@@ -23,10 +24,11 @@ def chat():
                 model="gemini-3.5-flash",
                 contents=[msg["content"] for msg in chat_history]
             )
-            #chat_history.append(("You: ",user_input))
-            #chat_history.append(("AI: ",response.text))
-            #chat_history.append({"role":"ai","content":ai_reply})
-            ai_reply = response.text
+            
+            ai_reply = markdown(
+                response.text,
+                extensions=["fenced_code","tables","nl2br"]
+            )
             chat_history.append({"role":"ai","content":ai_reply})
 
     return render_template("index.html",chat_history=chat_history)

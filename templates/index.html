@@ -6,6 +6,10 @@
             rel="stylesheet"
             href="{{ url_for('static',filename='style.css')}}"
             >
+        <link 
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.js"
+            >
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
@@ -17,20 +21,41 @@
             <div class="messages">
                 {% for msg in chat_history %}
                     <div class="message {{ msg.role }}">
-                        {{ msg.content }}
+                        {% if msg.role == 'ai' %}
+                            <div class="avatar">
+                                <img src="{{ url_for('static',filename='avatars/images1.jfif')}}" alt="ai">
+                            </div>
+                        {% endif %}
+                        <div class="bubble">
+                            {{ msg.content|safe }}
+                        </div>
+                        
+                        {% if msg.role == 'user' %}
+                            <div class="avatar">
+                               <img src="{{ url_for('static',filename='avatars/images12.jfif')}}" alt="user">
+                            </div>
+                        {% endif %}
+                       
+                        
+                        
 
                     </div>
                 {% endfor %}
             </div>
             <form method="POST" class="input-box">
                 <input type="text" name="message" placeholder="Type here..." required autocomplete="off">
-                <button type="submit">Send</button>
+                <button type="submit">
+                    Send
+                </button>
             
             </form>
         </div>
     </body>
     <script>
         const messages = document.querySelector(".messages");
-        messages.scrollTop = messages.scrollHeight;
+        if(messages){
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
     </script>
 </html>
